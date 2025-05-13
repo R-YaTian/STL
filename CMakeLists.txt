@@ -37,13 +37,13 @@ if(TARGET run-format)
     add_dependencies(format run-format)
 endif()
 
-if(TARGET run-validate)
-    add_custom_target(validate)
-    add_dependencies(validate run-validate)
-endif()
+# if(TARGET run-validate)
+#     add_custom_target(validate)
+#     add_dependencies(validate run-validate)
+# endif()
 
 option(BUILD_TESTING "Enable testing" ON)
-set(VCLIBS_SUFFIX "_oss" CACHE STRING "suffix for built DLL names to avoid conflicts with distributed DLLs")
+#set(VCLIBS_SUFFIX "_oss" CACHE STRING "suffix for built DLL names to avoid conflicts with distributed DLLs")
 
 option(STL_USE_ANALYZE "Pass the /analyze flag to MSVC" OFF)
 option(STL_ASAN_BUILD "Build the STL with ASan enabled" OFF)
