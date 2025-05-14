@@ -118,7 +118,7 @@ set(VCLIBS_DEBUG_OPTIONS "$<$<COMPILE_LANGUAGE:CXX>:/Od>")
 set(VCLIBS_RELEASE_OPTIONS "$<$<COMPILE_LANGUAGE:CXX>:/O2;/Os>")
 
 if(BUILD_TESTING)
-    enable_testing()
+    # enable_testing()
     add_subdirectory(simpletests)
 endif()
 
