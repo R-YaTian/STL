@@ -12,9 +12,7 @@ DEFINE_GUID(GUID_NULL, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
 
 extern "C" BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID) noexcept {
     if (ul_reason_for_call == DLL_PROCESS_ATTACH) {
-        if (!DisableThreadLibraryCalls(hModule)) {
-            return FALSE;
-        }
+        DisableThreadLibraryCalls(hModule);
     }
 
     return TRUE;

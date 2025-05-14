@@ -399,7 +399,25 @@ set(SATELLITE_DLL_SOURCES
 set(CMAKE_CXX_FLAGS "")
 set(CMAKE_CXX_FLAGS_DEBUG "")
 set(CMAKE_CXX_FLAGS_RELEASE "")
-set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib")
+set(CMAKE_CXX_STANDARD_LIBRARIES "kernel32.lib
+User32.lib
+ESENT.lib
+gdi32.lib
+Psapi.lib
+Winhttp.lib
+Advapi32.lib
+OleAut32.lib
+Ole32.lib
+Ws2_32.lib
+Shell32.lib
+Shlwapi.lib
+version.lib
+Cfgmgr32.lib
+Dbghelp.lib
+pdh.lib
+Setupapi.lib
+Iphlpapi.lib
+UxTheme.lib")
 set(CMAKE_CXX_STANDARD_LIBRARIES_INIT "kernel32.lib")
 set(CMAKE_MSVC_RUNTIME_LIBRARY "")
 
@@ -410,7 +428,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${STL_RUNTIME_OUTPUT_DIRECTORY}")
 set(CMAKE_STATIC_LINKER_FLAGS "/WX")
 set(CMAKE_STATIC_LINKER_FLAGS_DEBUG "")
 set(CMAKE_STATIC_LINKER_FLAGS_RELEASE "")
-set(CMAKE_SHARED_LINKER_FLAGS "/DEBUG:FULL /WX /RELEASE /SUBSYSTEM:Console /NODEFAULTLIB /INCREMENTAL:NO /MANIFEST:NO /DLL /profile /guard:cf /DEBUGTYPE:cv,fixup /LARGEADDRESSAWARE")
+set(CMAKE_SHARED_LINKER_FLAGS "/WX /RELEASE /SUBSYSTEM:Console /NODEFAULTLIB /INCREMENTAL:NO /MANIFEST:NO /DLL /LARGEADDRESSAWARE")
 set(CMAKE_SHARED_LINKER_FLAGS_DEBUG "")
 set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "")
 
@@ -418,10 +436,10 @@ set(CMAKE_SHARED_LINKER_FLAGS_RELEASE "")
 add_compile_definitions(_CRTBLD _VCRT_ALLOW_INTERNALS _HAS_OLD_IOSTREAMS_MEMBERS=1)
 
 # /Z7 for MSVC, /Zi for MASM
-set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "Embedded")
+# set(CMAKE_MSVC_DEBUG_INFORMATION_FORMAT "Embedded")
 
 add_compile_options(/WX /Gy
-    "$<$<COMPILE_LANGUAGE:CXX>:/diagnostics:caret;/W4;/w14265;/w15038;/fastfail;/guard:cf;/Zp8;/std:c++latest;/permissive-;/Zc:threadSafeInit-;/Zl>"
+    "$<$<COMPILE_LANGUAGE:CXX>:/diagnostics:caret;/W4;/w14265;/w15038;/Zp8;/std:c++latest;/permissive-;/Zc:threadSafeInit-;/Zl>"
     "$<$<COMPILE_LANGUAGE:ASM_MASM>:/W3;/nologo;/quiet>"
 )
 
@@ -506,6 +524,9 @@ function(add_stl_dlls D_SUFFIX REL_OR_DBG)
     set_target_properties(msvcp${D_SUFFIX} PROPERTIES ARCHIVE_OUTPUT_NAME "msvcp140_base${D_SUFFIX}${VCLIBS_SUFFIX}")
     set_target_properties(msvcp${D_SUFFIX} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
     set_target_properties(msvcp${D_SUFFIX} PROPERTIES OUTPUT_NAME "msvcp140${D_SUFFIX}${VCLIBS_SUFFIX}")
+    set_target_properties(msvcp${D_SUFFIX} PROPERTIES
+        LINK_FLAGS "/ENTRY:DllMainCRTStartupForYY_Thunks"
+    )
     target_link_options(msvcp${D_SUFFIX} PRIVATE ${link_options_${REL_OR_DBG}})
 
     # import library 'statics'
@@ -530,6 +551,9 @@ function(add_stl_dlls D_SUFFIX REL_OR_DBG)
     set_target_properties(msvcp_1${D_SUFFIX} PROPERTIES ARCHIVE_OUTPUT_NAME "msvcp140_1${D_SUFFIX}${VCLIBS_SUFFIX}")
     set_target_properties(msvcp_1${D_SUFFIX} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
     set_target_properties(msvcp_1${D_SUFFIX} PROPERTIES OUTPUT_NAME "msvcp140_1${D_SUFFIX}${VCLIBS_SUFFIX}")
+    set_target_properties(msvcp_1${D_SUFFIX} PROPERTIES
+        LINK_FLAGS "/ENTRY:DllMainCRTStartupForYY_Thunks"
+    )
     target_link_options(msvcp_1${D_SUFFIX} PRIVATE ${link_options_${REL_OR_DBG}})
 
     # msvcp140_2.dll (the special math satellite)
@@ -544,6 +568,9 @@ function(add_stl_dlls D_SUFFIX REL_OR_DBG)
     set_target_properties(msvcp_2${D_SUFFIX} PROPERTIES ARCHIVE_OUTPUT_NAME "msvcp140_2${D_SUFFIX}${VCLIBS_SUFFIX}")
     set_target_properties(msvcp_2${D_SUFFIX} PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
     set_target_properties(msvcp_2${D_SUFFIX} PROPERTIES OUTPUT_NAME "msvcp140_2${D_SUFFIX}${VCLIBS_SUFFIX}")
+    set_target_properties(msvcp_2${D_SUFFIX} PROPERTIES
+        LINK_FLAGS "/ENTRY:DllMainCRTStartupForYY_Thunks"
+    )
     target_link_options(msvcp_2${D_SUFFIX} PRIVATE ${link_options_${REL_OR_DBG}})
 
     # msvcp140_atomic_wait.dll (the atomic wait satellite)
@@ -556,10 +583,13 @@ function(add_stl_dlls D_SUFFIX REL_OR_DBG)
     # generate_satellite_def("atomic_wait" "${D_SUFFIX}")
 
     # add_library(msvcp${D_SUFFIX}_atomic_wait SHARED "${CMAKE_BINARY_DIR}/msvcp_atomic_wait${D_SUFFIX}.def")
-    # target_link_libraries(msvcp${D_SUFFIX}_atomic_wait PRIVATE msvcp${D_SUFFIX}_atomic_wait_objects msvcp${D_SUFFIX}_satellite_objects msvcp${D_SUFFIX}_implib_objects "msvcp${D_SUFFIX}" "${TOOLSET_LIB}/vcruntime${D_SUFFIX}.lib" "${TOOLSET_LIB}/msvcrt${D_SUFFIX}.lib" "ucrt${D_SUFFIX}.lib" "advapi32.lib")
+    # target_link_libraries(msvcp${D_SUFFIX}_atomic_wait PRIVATE msvcp${D_SUFFIX}_atomic_wait_objects msvcp${D_SUFFIX}_satellite_objects msvcp${D_SUFFIX}_implib_objects "msvcp${D_SUFFIX}" "${TOOLSET_LIB}/vcruntime${D_SUFFIX}.lib" "${TOOLSET_LIB}/msvcrt${D_SUFFIX}.lib" "ucrt${D_SUFFIX}.lib")
     # set_target_properties(msvcp${D_SUFFIX}_atomic_wait PROPERTIES ARCHIVE_OUTPUT_NAME "msvcp140_atomic_wait${D_SUFFIX}${VCLIBS_SUFFIX}")
     # set_target_properties(msvcp${D_SUFFIX}_atomic_wait PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
     # set_target_properties(msvcp${D_SUFFIX}_atomic_wait PROPERTIES OUTPUT_NAME "msvcp140${D_SUFFIX}_atomic_wait${VCLIBS_SUFFIX}")
+    # set_target_properties(msvcp${D_SUFFIX}_atomic_wait PROPERTIES
+    #     LINK_FLAGS "/ENTRY:DllMainCRTStartupForYY_Thunks"
+    # )
     # target_link_options(msvcp${D_SUFFIX}_atomic_wait PRIVATE ${link_options_${REL_OR_DBG}})
 
     # msvcp140_codecvt_ids.dll
@@ -573,6 +603,9 @@ function(add_stl_dlls D_SUFFIX REL_OR_DBG)
     set_target_properties(msvcp${D_SUFFIX}_codecvt_ids PROPERTIES ARCHIVE_OUTPUT_NAME "msvcp140_codecvt_ids${D_SUFFIX}${VCLIBS_SUFFIX}")
     set_target_properties(msvcp${D_SUFFIX}_codecvt_ids PROPERTIES ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}")
     set_target_properties(msvcp${D_SUFFIX}_codecvt_ids PROPERTIES OUTPUT_NAME "msvcp140${D_SUFFIX}_codecvt_ids${VCLIBS_SUFFIX}")
+    set_target_properties(msvcp${D_SUFFIX}_codecvt_ids PROPERTIES
+        LINK_FLAGS "/ENTRY:DllMainCRTStartupForYY_Thunks"
+    )
     target_link_options(msvcp${D_SUFFIX}_codecvt_ids PRIVATE ${link_options_${REL_OR_DBG}})
 
     # import library
