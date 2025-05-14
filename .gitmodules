@@ -4,3 +4,6 @@
 [submodule "boost-math"]
 	path = boost-math
 	url = https://github.com/boostorg/math.git
+[submodule "vcstl_atomic_wait_xp"]
+	path = vcstl_atomic_wait_xp
+	url = https://github.com/R-YaTian/vcstl_atomic_wait_xp.git

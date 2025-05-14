@@ -453,7 +453,7 @@ include_directories(BEFORE
 ###########################
 
 if(VCLIBS_TARGET_ARCHITECTURE MATCHES "^(x86|x64)$")
-    add_library(stl_alias_objects OBJECT ${ALIAS_SOURCES_X86_X64})
+    # add_library(stl_alias_objects OBJECT ${ALIAS_SOURCES_X86_X64})
 else()
     add_library(stl_alias_objects INTERFACE)
 
@@ -639,8 +639,8 @@ endfunction()
 # add_stl_statics("d1" Debug 1)
 # add_stl_statics("d0" Debug 0)
 
-add_library(stl_asan STATIC ${ASAN_SOURCES})
-set_target_properties(stl_asan PROPERTIES STATIC_LIBRARY_OPTIONS "${VCLIBS_EXPLICIT_MACHINE}")
+# add_library(stl_asan STATIC ${ASAN_SOURCES})
+# set_target_properties(stl_asan PROPERTIES STATIC_LIBRARY_OPTIONS "${VCLIBS_EXPLICIT_MACHINE}")
 
 configure_file(set_environment.bat.in "${PROJECT_BINARY_DIR}/set_environment.bat" @ONLY)
 configure_file(set_environment.ps1.in "${PROJECT_BINARY_DIR}/set_environment.ps1" @ONLY)
